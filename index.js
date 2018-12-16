@@ -35,7 +35,7 @@ reader.on('record', (record) => {
         .text
     ;
 
-    console.log('geo_id', geo_id);
+    console.log('Read geo_id', geo_id);
 
     const geometryNode = record.children.filter( 
         o => o.tag.match(/^(MultiGeometry|Polygon)$/)
@@ -53,7 +53,6 @@ reader.on('record', (record) => {
 });
 
 const parsed = () => {
-    console.log('END: ', counted);
     let xml = '';
 
     Object.keys(geoid2kml).forEach( geoid => {
@@ -61,13 +60,13 @@ const parsed = () => {
         xml += renderNodeAsXML( geoid2kml[geoid]);
     });
 
-    console.log(xml);
+    console.log('END: ', counted);
+    console.log('Created XML of ', xml.length);
 }
 
 const renderNodeAsXML = (nodes) => {
     let xml = '';
     nodes.forEach( node => {
-        console.log(node);
         xml += processNode(node);
     });
     return xml;
@@ -81,6 +80,5 @@ const processNode = (node) => {
     if (node.children) {
         node.children.forEach( child => xml += processNode(child) );
     }
-
     return xml + '</' + node.tag + '>';
 };
